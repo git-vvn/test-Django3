@@ -1,0 +1,73 @@
+Commands 2.9
+
+from newsApp.models import *
+
+1. u1 = User.objects.create_user('Oleg')
+u2 = User.objects.create_user('Mary')
+2. Author.objects.create(authorUser=u1)
+Author.objects.create(authorUser=u2)
+3. Category.objects.create(name='IT')
+Category.objects.create(name='Auto')
+Category.objects.create(name='Stud')
+Category.objects.create(name='Work')
+	
+4.	auth = Author.objects.get(id=1)
+auth2 = Author.objects.get(id=2)
+Post.objects.create(author=auth, categoryType='AR', title='Some_article_title', text='some article1 text about article theme')
+Post.objects.create(author=auth, categoryType='NW', title='Some_news_title', text='another article2 text about news theme')
+Post.objects.create(author=auth2, categoryType='AR', title='Some_article2nd user_title', text='another article2 text about article2 theme')
+	
+5. Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=4))
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=2))
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=3))
+6. Comment.objects.create(commentPost = Post.objects.get(id=2), commentUser = u1, text = 'Anytext from User Oleg')
+Comment.objects.create(commentPost = Post.objects.get(id=2), commentUser = Author.objects.get(id = 2).authorUser, text = 'another text from author Mary')
+Comment.objects.create(commentPost = Post.objects.get(id=3), commentUser = User.objects.get(id = 1), text = 'another text from user')
+Comment.objects.create(commentPost = Post.objects.get(id=1), commentUser = User.objects.get(id = 2), text = 'one more comment from user')
+Comment.objects.create(commentPost = Post.objects.get(id=1), commentUser = User.objects.get(id = 1), text = 'one more comment from user Oleg 4 check')
+
+7. Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=3).dislike()
+Comment.objects.get(id=4).dislike()
+Comment.objects.get(id=4).dislike()
+
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=3).like()
+
+8. auth1=Author.objects.get(id=1)
+auth2=Author.objects.get(id=2)
+auth1.update_rating()
+auth2.update_rating()
+
+9. a = Author.objects.order_by('-ratingAuthor')[:1]
+for elem in a:
+	elem.authorUser.username
+	elem.ratingAuthor
+	
+10. p = Post.objects.order_by('-rating')[:1]
+for elem in p:
+	print('Дата создания: ' + str(elem.dateCreation.strftime('%Y-%m-%d %H:%M:%S')))
+	print('Автор: ' + elem.author.authorUser.username)
+	#print('rating: ' + str(elem.rating))
+	print('Название: ' + elem.title)
+	elem.preview()
+	bestPost = elem.id
+
+11. c = Comment.objects.filter(commentPost_id = bestPost)
+for elem in c:
+	print('Дата создания: ' + str(elem.dateCreation.strftime('%Y-%m-%d %H:%M:%S')))
+	print('Автор: ' + User.objects.get(id=elem.commentUser_id).username)
+	print('Рейтинг: ' + str(elem.rating))
+	elem.text
+
+
+
+	
+
